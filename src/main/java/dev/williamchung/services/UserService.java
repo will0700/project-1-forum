@@ -22,4 +22,14 @@ public class UserService {
             return user.getPassword().equals(password);
         }
     }
+
+    public Boolean usernameAvailable(String username) {
+        User user = this.userRepository.findByUsername(username);
+        return user == null;
+    }
+
+    public User registerUser(String username, String password) {
+        User user = new User(username, password);
+        return this.userRepository.save(user);
+    }
 }
