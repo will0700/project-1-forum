@@ -11,38 +11,27 @@
     <br>
     <br>
     <br>
-    <form method="POST" action="login">
-        <div class="box">
-            <h1>Log In</h1>
-            <label>
-                <input type="text" name="username" class="email" />
-            </label>
-            <label>
-                <input type="password" name="password" class="email" />
-            </label>
+    <div class="box">
+        <form method="POST" action="login">
+            <h1>Log In!</h1>
+            <input class="input" type="text" name="username" placeholder="Username" />
+            <input class="input" type="password" name="password" placeholder="password" />
             <input class="btn" type="submit" value="Login" />
-        </div> <!-- End Box -->
-    </form>
+        </form>
+    </div>
     <br>
     <br>
     <br>
     <br>
     <br>
     <br>
-    <form method="post" action="">
-        <div class="box2">
-            <h1>Sign Up!</h1>
-            <label>
-                <input type="email" name="email" value="email"  class="email" />
-            </label>
-            <label>
-                <input type="password" name="email" value="email"  class="email" />
-            </label>
-            <label>
-                <input type="text" name="email" value="username"  class="email" />
-            </label>
-            <a href="#"><div class="btn">Sign Up</div></a> <!-- End Btn -->
-        </div> <!-- End Box -->
-    </form>
+    <div class="box">
+        <form method="POST" action="register">
+            <h1>Register!</h1>
+            <input class="input" type="text" name="username" placeholder="Username" />
+            <input class="input" type="password" name="password" placeholder="password" />
+            <input class="btn" type="submit" value="Register" />
+        </form>
+    </div>
 </body>
 </html>

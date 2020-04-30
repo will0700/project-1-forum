@@ -71,7 +71,32 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         return user;
     }
 
-
+    @Override
+    public User save(User user) {
+        Connection connection = null;
+        try {
+            connection = connectionUtil.getConnection();
+            String sqlQuery = "INSERT INTO forum.users (username, password) VALUES (?, ?) RETURNING id;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                user.setId(resultSet.getInt("id"));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }
+        return user;
+    }
 
 
     //Below methods not given override implementation because not used
@@ -81,12 +106,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
     }
 
     @Override
-    public Integer save(User obj) {
-        return null;
-    }
-
-    @Override
-    public Integer update(User obj) {
+    public User update(User obj) {
         return null;
     }
 

@@ -1,5 +1,8 @@
 package dev.williamchung.servlets;
 
+import dev.williamchung.models.Forum;
+import dev.williamchung.models.User;
+import dev.williamchung.services.ForumService;
 import dev.williamchung.services.UserService;
 
 import javax.servlet.RequestDispatcher;
@@ -8,16 +11,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 @WebServlet("/")
 public class MainServlet extends HttpServlet {
     private UserService userService = new UserService();
+    private ForumService forumService = new ForumService();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
         String action = request.getServletPath();
-        System.out.println("doGet was hit at" + action);
         try {
             switch(action) {
                 case "/forums":
@@ -32,6 +38,7 @@ public class MainServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
         String action = request.getServletPath();
         System.out.println("doPost was hit at" + action);
         try {
@@ -54,6 +61,8 @@ public class MainServlet extends HttpServlet {
     }
 
     private void showAllForums(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        List<Forum> forums = forumService.getAllForums();
+        request.setAttribute("forums", forums);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/allForums.jsp");
         dispatcher.forward(request, response);
     }
@@ -61,17 +70,28 @@ public class MainServlet extends HttpServlet {
     private void doLogin(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        System.out.println(username + password);
         if (userService.authenticateUser(username, password)) {
+            User user = userService.getUserByUsername(username);
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
             response.sendRedirect("/forums");
         } else {
             response.sendRedirect("/");
-            //Need to let user know that login was invalid, but that will be done through JSP,
-            //but i need to dig old files up and figure out how again.
+            //Need to let user know that login was invalid through JSP error page
         }
     }
 
     private void doRegister(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
-        //Need to write the save() method in userRepository before we can implement this
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        if (userService.usernameAvailable(username)) {
+            User user = userService.registerUser(username, password);
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            response.sendRedirect("/forums");
+        } else {
+            response.sendRedirect("/");
+            //Need to let user know that registration failed through JSP error page
+        }
     }
 }
