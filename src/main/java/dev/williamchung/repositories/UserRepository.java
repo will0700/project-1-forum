@@ -48,8 +48,8 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         try {
             connection = connectionUtil.getConnection();
             String sqlQuery = "SELECT * FROM forum.users WHERE id = ?";
-            PreparedStatement preparedStatement =connection.prepareStatement(sqlQuery);
-            preparedStatement.setString(1, id.toString());
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 user = new User();
@@ -66,7 +66,6 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                     exception.printStackTrace();
                 }
             }
-
         }
         return user;
     }

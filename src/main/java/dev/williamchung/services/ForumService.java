@@ -7,7 +7,12 @@ import java.util.List;
 
 public class ForumService {
     private ForumRepository forumRepository = new ForumRepository();
-    public List<Forum> getAllForums(){
-            return forumRepository.findAll();
-        }
+    public List<Forum> getAllForums() {
+        return forumRepository.findAll();
+    }
+    public Forum getForumById(String forumId) {
+        Integer intId = Integer.parseInt(forumId);
+        return forumRepository.findById(intId);
+    }
+
 }
