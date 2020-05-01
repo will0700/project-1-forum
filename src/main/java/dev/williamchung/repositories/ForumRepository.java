@@ -14,7 +14,32 @@ public class ForumRepository extends AbstractRepository implements Repository<Fo
 
     @Override
     public Forum findById(Integer integer) {
-        return null;
+        Connection connection = null;
+        Forum forum = null;
+        try {
+            connection = connectionUtil.getConnection();
+            String sqlQuery = "SELECT * FROM forum.forums where id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setInt(1, integer);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                forum = new Forum();
+                forum.setId(resultSet.getInt("id"));
+                forum.setForumName((resultSet.getString("forumname")));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                }
+            }
+
+        }
+        return forum;
     }
 
     @Override

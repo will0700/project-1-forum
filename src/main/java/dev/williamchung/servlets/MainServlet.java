@@ -1,8 +1,12 @@
 package dev.williamchung.servlets;
 
+import dev.williamchung.models.Comment;
 import dev.williamchung.models.Forum;
 import dev.williamchung.models.User;
+import dev.williamchung.models.Thread;
+import dev.williamchung.services.CommentService;
 import dev.williamchung.services.ForumService;
+import dev.williamchung.services.ThreadService;
 import dev.williamchung.services.UserService;
 
 import javax.servlet.RequestDispatcher;
@@ -20,10 +24,25 @@ import java.util.List;
 public class MainServlet extends HttpServlet {
     private UserService userService = new UserService();
     private ForumService forumService = new ForumService();
+    private ThreadService threadService = new ThreadService();
+    private CommentService commentService = new CommentService();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         String action = request.getServletPath();
+        if (action.startsWith("/forum/")){
+            try {
+                showOneForum(request, response);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        } else if (action.startsWith("/thread/")){
+            try {
+                showThread(request, response);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
         try {
             switch(action) {
                 case "/forums":
@@ -64,6 +83,30 @@ public class MainServlet extends HttpServlet {
         List<Forum> forums = forumService.getAllForums();
         request.setAttribute("forums", forums);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/allForums.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void showOneForum(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        String action = request.getServletPath();
+        String forumId = (String) action.subSequence(7, action.length());
+        Forum forum = forumService.getForumById(forumId);
+        request.setAttribute("forum", forum);
+        List<Thread> threads = threadService.getThreadsByForum(forum.getId());
+        request.setAttribute("threads", threads);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/oneForum.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void showThread(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        String action = request.getServletPath();
+        String threadId = (String) action.subSequence(8, action.length());
+        System.out.println(threadId);
+        Thread thread = threadService.getThreadById(threadId);
+        System.out.println(thread.getContent());
+        request.setAttribute("thread", thread);
+        List<Comment> comments = commentService.getCommentsByThread(thread.getId());
+        request.setAttribute("comments", comments);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/oneThread.jsp");
         dispatcher.forward(request, response);
     }
 
