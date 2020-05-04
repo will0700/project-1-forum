@@ -20,7 +20,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/")
+@WebServlet(
+        urlPatterns = {"/"},
+    name="thisisthemainservletname")
 public class MainServlet extends HttpServlet {
     private UserService userService = new UserService();
     private ForumService forumService = new ForumService();
@@ -48,6 +50,9 @@ public class MainServlet extends HttpServlet {
                 case "/forums":
                     showAllForums(request, response);
                     break;
+                case "/logout":
+                    doLogout(request, response);
+                    break;
                 default:
                     showLoginReg(request, response);
             }
@@ -59,7 +64,6 @@ public class MainServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         String action = request.getServletPath();
-        System.out.println("doPost was hit at" + action);
         try {
             switch(action) {
                 case "/login":
@@ -68,6 +72,14 @@ public class MainServlet extends HttpServlet {
                 case "/register":
                     doRegister(request, response);
                     break;
+                case "/comment":
+                    postComment(request, response);
+                    break;
+                case "/thread":
+                    postThread(request, response);
+                    break;
+                default:
+                    showLoginReg(request, response);
             }
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -80,42 +92,57 @@ public class MainServlet extends HttpServlet {
     }
 
     private void showAllForums(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
-        List<Forum> forums = forumService.getAllForums();
-        request.setAttribute("forums", forums);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/allForums.jsp");
-        dispatcher.forward(request, response);
+        HttpSession session = request.getSession();
+        if(session.getAttribute("user") == null){
+            response.sendRedirect("/");
+        } else {
+            List<Forum> forums = forumService.getAllForums();
+            request.setAttribute("forums", forums);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/allForums.jsp");
+            dispatcher.forward(request, response);
+        }
     }
 
     private void showOneForum(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
-        String action = request.getServletPath();
-        String forumId = (String) action.subSequence(7, action.length());
-        Forum forum = forumService.getForumById(forumId);
-        request.setAttribute("forum", forum);
-        List<Thread> threads = threadService.getThreadsByForum(forum.getId());
-        request.setAttribute("threads", threads);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/oneForum.jsp");
-        dispatcher.forward(request, response);
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
+            response.sendRedirect("/");
+        } else {
+            String action = request.getServletPath();
+            String forumId = (String) action.subSequence(7, action.length());
+            Forum forum = forumService.getForumById(forumId);
+            request.setAttribute("forum", forum);
+            List<Thread> threads = threadService.getThreadsByForum(forum.getId());
+            request.setAttribute("threads", threads);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/oneForum.jsp");
+            dispatcher.forward(request, response);
+        }
     }
 
     private void showThread(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
-        String action = request.getServletPath();
-        String threadId = (String) action.subSequence(8, action.length());
-        System.out.println(threadId);
-        Thread thread = threadService.getThreadById(threadId);
-        System.out.println(thread.getContent());
-        request.setAttribute("thread", thread);
-        List<Comment> comments = commentService.getCommentsByThread(thread.getId());
-        request.setAttribute("comments", comments);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/oneThread.jsp");
-        dispatcher.forward(request, response);
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
+            response.sendRedirect("/");
+        } else {
+            String action = request.getServletPath();
+            String threadId = (String) action.subSequence(8, action.length());
+            System.out.println(threadId);
+            Thread thread = threadService.getThreadById(threadId);
+            System.out.println(thread.getContent());
+            request.setAttribute("thread", thread);
+            List<Comment> comments = commentService.getCommentsByThread(thread.getId());
+            request.setAttribute("comments", comments);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/oneThread.jsp");
+            dispatcher.forward(request, response);
+        }
     }
 
     private void doLogin(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        HttpSession session = request.getSession();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         if (userService.authenticateUser(username, password)) {
             User user = userService.getUserByUsername(username);
-            HttpSession session = request.getSession();
             session.setAttribute("user", user);
             response.sendRedirect("/forums");
         } else {
@@ -125,16 +152,49 @@ public class MainServlet extends HttpServlet {
     }
 
     private void doRegister(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        HttpSession session = request.getSession();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         if (userService.usernameAvailable(username)) {
             User user = userService.registerUser(username, password);
-            HttpSession session = request.getSession();
             session.setAttribute("user", user);
             response.sendRedirect("/forums");
         } else {
             response.sendRedirect("/");
             //Need to let user know that registration failed through JSP error page
+        }
+    }
+
+    private void doLogout(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        HttpSession session = request.getSession();
+        session.invalidate();
+        response.sendRedirect("/");
+    }
+
+    private void postComment(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
+            response.sendRedirect("/");
+        } else {
+            User user = (User) session.getAttribute("user");
+            String commentContent = request.getParameter("comment");
+            String threadId = request.getParameter("threadId");
+            commentService.postComment(commentContent, user, threadId);
+            response.sendRedirect("/thread/" + threadId);
+        }
+    }
+
+    private void postThread(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
+            response.sendRedirect("/");
+        } else {
+            User user = (User) session.getAttribute("user");
+            String threadTitle = request.getParameter("threadTitle");
+            String threadContent = request.getParameter("threadContent");
+            String forumId = request.getParameter("forumId");
+            Thread thread = threadService.postThread(threadTitle, threadContent, user.getId(),forumId);
+            response.sendRedirect("/thread/" + thread.getId().toString());
         }
     }
 }

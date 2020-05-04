@@ -11,6 +11,14 @@ public class Comment {
 
     private Integer threadId;
 
+    public Comment(){}
+    public Comment(String commentContent, Integer authorId, Integer threadId){
+        this.comment = commentContent;
+        this.authorId = authorId;
+        this.threadId = threadId;
+    }
+
+
     public Integer getId() {
         return id;
     }

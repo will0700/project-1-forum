@@ -14,4 +14,9 @@ public class ThreadService {
         Integer id = Integer.parseInt(threadId);
         return threadRepository.findById(id);
     }
+    public Thread postThread(String threadTitle, String threadContent, Integer authorId, String forumId){
+        Integer forumIdInteger = Integer.parseInt(forumId);
+        Thread thread = new Thread(threadTitle, threadContent, authorId, forumIdInteger);
+        return threadRepository.save(thread);
+    }
 }

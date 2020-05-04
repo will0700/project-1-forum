@@ -2,6 +2,7 @@ package dev.williamchung.repositories;
 
 import dev.williamchung.models.Comment;
 import dev.williamchung.models.Thread;
+import dev.williamchung.utils.ConnectionUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,7 +43,33 @@ public class CommentRepository extends AbstractRepository implements Repository<
         return comments;
     }
 
-
+    @Override
+    public Comment save(Comment comment) {
+        Connection connection = null;
+        try {
+            connection = connectionUtil.getConnection();
+            String sqlQuery = "INSERT into forum.comments (commentcontent, author_Id, thread_Id) VALUES (?, ?, ?) RETURNING id;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, comment.getComment());
+            preparedStatement.setInt(2, comment.getAuthorId());
+            preparedStatement.setInt(3, comment.getThreadId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                comment.setId(resultSet.getInt("id"));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }
+        return comment;
+    }
 
 
 
@@ -54,11 +81,6 @@ public class CommentRepository extends AbstractRepository implements Repository<
 
     @Override
     public List<Comment> findAll() {
-        return null;
-    }
-
-    @Override
-    public Comment save(Comment obj) {
         return null;
     }
 

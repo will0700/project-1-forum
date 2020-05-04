@@ -14,6 +14,7 @@
 </head>
 <body>
     <h2>Welcome <c:out value="${user.username}" /> !</h2>
+    <a href="/logout">Logout</a>
     <h2>These are the forums</h2>
     <div>
         <c:forEach items="${forums}" var="forum">

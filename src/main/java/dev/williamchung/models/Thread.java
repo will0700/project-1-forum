@@ -13,6 +13,18 @@ public class Thread {
 
     private Integer forumId;
 
+
+    //Constructors
+    public Thread(){};
+    public Thread(String title, String content, Integer authorId, Integer forumId){
+        this.title = title;
+        this.content = content;
+        this.authorId = authorId;
+        this.forumId = forumId;
+    }
+
+
+    //Getters & Setters
     public Integer getId() {
         return id;
     }
