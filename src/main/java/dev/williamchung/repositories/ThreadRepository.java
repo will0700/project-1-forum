@@ -75,15 +75,38 @@ public class ThreadRepository extends AbstractRepository implements Repository<T
         return thread;
     }
 
+    @Override
+    public Thread save(Thread thread) {
+        Connection connection = null;
+        try {
+            connection = connectionUtil.getConnection();
+            String sqlQuery = "INSERT INTO forum.threads (threadtitle, threadcontent, author_Id, forum_Id) VALUES (?, ?, ?, ?) RETURNING id;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, thread.getTitle());
+            preparedStatement.setString(2, thread.getContent());
+            preparedStatement.setInt(3, thread.getAuthorId());
+            preparedStatement.setInt(4, thread.getForumId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                thread.setId(resultSet.getInt("id"));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }
+        return thread;
+    }
 
     //Override methods not implemented because unused
     @Override
     public List<Thread> findAll() {
-        return null;
-    }
-
-    @Override
-    public Thread save(Thread obj) {
         return null;
     }
 

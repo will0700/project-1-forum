@@ -12,6 +12,8 @@
     <title>Forum | ${thread.title}</title>
 </head>
 <body>
+    <h2>Welcome <c:out value="${user.username}" /> !</h2>
+    <a href="/logout">Logout</a>
     <div>
         <h2><c:out value="${thread.title}" /></h2>
         <p><c:out value="${thread.content}" /></p>
@@ -20,7 +22,8 @@
         <form action="/comment" method="POST">
             <div>
                 <label>Write a new comment: </label>
-                <input type="text" name="comment">
+                <input type="text" name="comment" placeholder="Write your comment here">
+                <input type="hidden" name="threadId" value="${thread.id}"> <!--pass thread id as hidden input-->
             </div>
             <input type="submit" value="post comment">
         </form>
