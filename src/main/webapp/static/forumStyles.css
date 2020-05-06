@@ -1,0 +1,23 @@
+.page-header{
+    text-shadow: 2px 2px #ff0000;
+}
+
+#container{
+    background: lightgray;
+    margin-top: 10%;
+    text-align: center;
+}
+
+#logout{
+    font-weight: bold;
+}
+
+#nav{
+    font-weight: bold;
+    font-size: x-large;
+}
+
+#header2{
+    margin-top: 4%;
+    text-shadow: 2px 2px yellow;
+}

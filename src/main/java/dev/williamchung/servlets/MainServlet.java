@@ -99,6 +99,7 @@ public class MainServlet extends HttpServlet {
             List<Forum> forums = forumService.getAllForums();
             request.setAttribute("forums", forums);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/allForums.jsp");
+            System.out.println(dispatcher.toString());
             dispatcher.forward(request, response);
         }
     }
