@@ -24,5 +24,17 @@
     width: 500px;
     font-size:14pt;
 
+}
 
+#nav{
+    font-weight: bold;
+    font-size: x-large;
+    display: inline-block;
+    padding: 20px;
+    background-color: lightcyan;
+}
+
+#header3{
+    margin-top: 2%;
+    text-shadow: 2px 2px white;
 }

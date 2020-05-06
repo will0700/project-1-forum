@@ -17,7 +17,7 @@
 </head>
 <body>
 
-    <div class="col-lg-6" id="container">
+    <div class="col-lg-12" id="container">
         <div class ="page-header">
     <h2>Welcome <c:out value="${user.username}" /> !</h2>
         </div>
