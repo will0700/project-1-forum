@@ -29,6 +29,7 @@ public class MainServlet extends HttpServlet {
     private ThreadService threadService = new ThreadService();
     private CommentService commentService = new CommentService();
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         String action = request.getServletPath();
@@ -44,23 +45,25 @@ public class MainServlet extends HttpServlet {
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
-        }
-        try {
-            switch(action) {
-                case "/forums":
-                    showAllForums(request, response);
-                    break;
-                case "/logout":
-                    doLogout(request, response);
-                    break;
-                default:
-                    showLoginReg(request, response);
+        } else {
+            try {
+                switch (action) {
+                    case "/forums":
+                        showAllForums(request, response);
+                        break;
+                    case "/logout":
+                        doLogout(request, response);
+                        break;
+                    default:
+                        showLoginReg(request, response);
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
         }
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         String action = request.getServletPath();
@@ -127,9 +130,7 @@ public class MainServlet extends HttpServlet {
         } else {
             String action = request.getServletPath();
             String threadId = (String) action.subSequence(8, action.length());
-            System.out.println(threadId);
             Thread thread = threadService.getThreadById(threadId);
-            System.out.println(thread.getContent());
             request.setAttribute("thread", thread);
             List<Comment> comments = commentService.getCommentsByThread(thread.getId());
             request.setAttribute("comments", comments);
