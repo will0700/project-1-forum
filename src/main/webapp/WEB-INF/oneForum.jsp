@@ -11,12 +11,23 @@
 <html>
 <head>
     <title>Forum | <c:out value="${forum.forumName}" /></title>
+    <style><%@include file="/static/oneforumStyles.css"%></style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </head>
 <body>
+<div class="col-lg-6" id="container">
+    <div class ="page-header">
     <h2>Welcome <c:out value="${user.username}" /> !</h2>
+    </div>
+
+    <div class="btn btn-dark" id="logout">
     <a href="/logout">Logout</a>
+    </div>
+
+        <div id="header2">
     <h2>Welcome to the <c:out value="${forum.forumName}" /> forum!</h2>
-    <a href="/logout">Logout</a>
+        </div>
     <div>
         <c:forEach items="${threads}" var="thread">
             <div class="thread">
@@ -25,13 +36,20 @@
         </c:forEach>
         <br>
         <form action="/thread" method="POST">
+            <div class="form-group">
             <label>Title: </label>
             <input type="text" name="threadTitle">
+            </div>
+            <div class="form-group">
             <label>Content: </label>
-            <input type="text" name="threadContent">
+                <textarea id="textbox" type="text" name="threadContent"></textarea>
             <input type="hidden" name="forumId" value="${forum.id}">
+                <br>
             <input type="submit" value="Post thread">
+            </div>
         </form>
     </div>
+</div>
 </body>
+
 </html>

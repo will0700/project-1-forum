@@ -10,18 +10,33 @@
 
 <html>
 <head>
+    <style><%@include file="/static/forumStyles.css"%></style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <title>All Forums</title>
 </head>
 <body>
+
+    <div class="col-lg-6" id="container">
+        <div class ="page-header">
     <h2>Welcome <c:out value="${user.username}" /> !</h2>
-    <a href="/logout">Logout</a>
-    <h2>These are the forums</h2>
-    <div>
+        </div>
+
+        <div class="btn btn-dark" id="logout">
+    <a class href="/logout">Logout</a>
+        </div>
+
+        <div id="header2">
+    <h2>Forums listed below</h2>
+        </div>
+
+    <div id="nav">
         <c:forEach items="${forums}" var="forum">
             <div class="forum">
                 <a href="forum/${forum.id}"><c:out value="${forum.forumName}" /></a>
             </div>
         </c:forEach>
+    </div>
     </div>
 </body>
 </html>
