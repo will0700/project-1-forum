@@ -16,7 +16,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </head>
 <body>
-<div class="col-lg-6" id="container">
+<div class="col-lg-12" id="container">
     <div class ="page-header">
     <h2>Welcome <c:out value="${user.username}" /> !</h2>
     </div>
@@ -29,11 +29,7 @@
     <h2>Welcome to the <c:out value="${forum.forumName}" /> forum!</h2>
         </div>
     <div>
-        <c:forEach items="${threads}" var="thread">
-            <div class="thread">
-                <a href="/thread/${thread.id}"><c:out value="${thread.title}" /></a>
-            </div>
-        </c:forEach>
+
         <br>
         <form action="/thread" method="POST">
             <div class="form-group">
@@ -48,6 +44,17 @@
             <input type="submit" value="Post thread">
             </div>
         </form>
+        <br>
+        <div id="header3">
+            <h2><c:out value="${forum.forumName}"  /> threads listed below</h2>
+        </div>
+        <div id="nav">
+        <c:forEach items="${threads}" var="thread">
+            <div class="thread">
+                <a href="/thread/${thread.id}"><c:out value="${thread.title}" /></a>
+            </div>
+        </c:forEach>
+        </div>
     </div>
 </div>
 </body>

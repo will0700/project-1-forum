@@ -1,0 +1,37 @@
+#logout{
+    font-weight: bold;
+}
+
+.page-header{
+
+    text-shadow: 2px 2px #ff0000;
+
+}
+
+#container{
+    background: lightgray;
+    margin-top: 10%;
+    text-align: center;
+}
+
+.threadContent{
+
+    margin-top: 3%;
+    margin-left: 20%;
+    margin-right: 20%;
+
+}
+
+#comment-container{
+    margin-top: 2%;
+    margin-left: 20%;
+    margin-right: 20%;
+    text-align: left;
+
+}
+
+.comment{
+    margin-top: 6%;
+    margin-bottom: 6%;
+    align-items: center;
+}
