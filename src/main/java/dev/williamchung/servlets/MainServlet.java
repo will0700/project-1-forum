@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * This is the main servlet which uses a FrontController design of sorts.
@@ -33,6 +34,7 @@ public class MainServlet extends HttpServlet {
     private final ForumService forumService = new ForumService();
     private final ThreadService threadService = new ThreadService();
     private final CommentService commentService = new CommentService();
+    private static Logger LOG = Logger.getLogger(MainServlet.class);
 
     /**
      * The doGet override implementation matches routes coming in with a GET request.
@@ -50,14 +52,18 @@ public class MainServlet extends HttpServlet {
         String action = request.getServletPath();
         if (action.startsWith("/forum/")){
             try {
+                LOG.info("Showing one forum page ...");
                 showOneForum(request, response);
             } catch (Exception exception) {
+                LOG.warn("Error in doGet showoneForum: "+exception.getMessage());
                 exception.printStackTrace();
             }
         } else if (action.startsWith("/thread/")){
             try {
+                LOG.info("Showing Thread page ...");
                 showThread(request, response);
             } catch (Exception exception) {
+                LOG.warn("Error in doGet thread: "+exception.getMessage());
                 exception.printStackTrace();
             }
         } else {
@@ -73,6 +79,7 @@ public class MainServlet extends HttpServlet {
                         showLoginReg(request, response);
                 }
             } catch (Exception exception) {
+                LOG.warn("Error in all forums switch: "+exception.getMessage());
                 exception.printStackTrace();
             }
         }
@@ -109,6 +116,7 @@ public class MainServlet extends HttpServlet {
                     showLoginReg(request, response);
             }
         } catch (Exception exception) {
+            LOG.warn("Error in do post switch: "+exception.getMessage());
             exception.printStackTrace();
         }
     }
@@ -132,6 +140,7 @@ public class MainServlet extends HttpServlet {
             }
         } catch (Exception exception) {
             exception.printStackTrace();
+            LOG.warn("Error in do delete: "+exception.getMessage());
         }
     }
 
@@ -162,6 +171,7 @@ public class MainServlet extends HttpServlet {
     private void showAllForums(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         HttpSession session = request.getSession();
         if(session.getAttribute("user") == null){
+            LOG.info("Showing all forums page ...");
             response.sendRedirect("/");
         } else {
             List<Forum> forums = forumService.getAllForums();
@@ -185,6 +195,7 @@ public class MainServlet extends HttpServlet {
     private void showOneForum(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         HttpSession session = request.getSession();
         if (session.getAttribute("user") == null) {
+            LOG.info("Showing one forum...");
             response.sendRedirect("/");
         } else {
             String action = request.getServletPath();
@@ -211,6 +222,7 @@ public class MainServlet extends HttpServlet {
     private void showThread(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         HttpSession session = request.getSession();
         if (session.getAttribute("user") == null) {
+            LOG.info("Showing thread...");
             response.sendRedirect("/");
         } else {
             String action = request.getServletPath();
@@ -244,6 +256,7 @@ public class MainServlet extends HttpServlet {
             User user = userService.getUserByUsername(username);
             session.setAttribute("user", user);
             response.sendRedirect("/forums");
+            LOG.info("user logged in...");
         } else {
             response.sendRedirect("/");
             //Need to let user know that login was invalid through JSP error page
@@ -268,6 +281,7 @@ public class MainServlet extends HttpServlet {
             User user = userService.registerUser(username, password);
             session.setAttribute("user", user);
             response.sendRedirect("/forums");
+            LOG.info("user registered...");
         } else {
             response.sendRedirect("/");
             //Need to let user know that registration failed through JSP error page
@@ -286,6 +300,7 @@ public class MainServlet extends HttpServlet {
         HttpSession session = request.getSession();
         session.invalidate();
         response.sendRedirect("/");
+        LOG.info("user logged out...");
     }
 
     /**
