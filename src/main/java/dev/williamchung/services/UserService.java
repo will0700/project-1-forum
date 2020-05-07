@@ -32,4 +32,7 @@ public class UserService {
         User user = new User(username, password);
         return this.userRepository.save(user);
     }
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 }

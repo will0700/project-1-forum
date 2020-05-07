@@ -16,6 +16,8 @@ public class CommentService {
         Comment comment = new Comment(commentContent, author.getId(), threadIdInteger);
         return commentRepository.save(comment);
     }
-
+    public void setCommentRepository(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }
 
 }
