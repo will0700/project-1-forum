@@ -4,6 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * The PostgressConnectionUtil is an extension of the ConnectonUtil abstract.
+ * This class contains a static method to register the driver.
+ * The constructor will pull the database url and credentials from the project configuration's System Environment variables.
+ * It also stores a schema name as an instance variable.
+ */
 public class PostgresConnectionUtil extends ConnectionUtil {
     //Inject DriverManager from postgresql
     static {

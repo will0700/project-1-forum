@@ -1,6 +1,9 @@
 package dev.williamchung.models;
 
-
+/**
+ * This is the Comment Model. Comments have the comment and two foreign keys: authorId and threadId.
+ * This class contains the properties, constructors, getters, and setters.
+ */
 public class Comment {
 
     private Integer id;

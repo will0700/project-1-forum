@@ -10,7 +10,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ThreadRepository is an extension of the AbstractRepository and implements Repository interface.
+ * each method is explained below.
+ */
 public class ThreadRepository extends AbstractRepository implements Repository<Thread, Integer> {
+    /**
+     * Queries the database for all the Thread objects with foreign key for one Forum.
+     * @param forumId
+     * is passed in by the Service.
+     * @return
+     * returns an ArrayList of all the Thread objects instantiated with the ResultSet.
+     */
     public List<Thread> findAllByForum(Integer forumId) {
         Connection connection = null;
         List<Thread> threads = new ArrayList<Thread>();
@@ -43,6 +54,13 @@ public class ThreadRepository extends AbstractRepository implements Repository<T
         return threads;
     }
 
+    /**
+     * Query the database for one Thread by id.
+     * @param id
+     * is passed in by the service.
+     * @return
+     * returns one Thread instantiated from the ResultSet.
+     */
     @Override
     public Thread findById(Integer id) {
         Connection connection = null;
@@ -75,6 +93,14 @@ public class ThreadRepository extends AbstractRepository implements Repository<T
         return thread;
     }
 
+    /**
+     * We query the database and insert a new row into the Users table.
+     * @param thread
+     * is passed in by the Service.
+     * We read each property of the thread with Getters and write those values into the preparedStatement's query.
+     * @return
+     * return the saved thread object after we set the id of the thread that the database generated.
+     */
     @Override
     public Thread save(Thread thread) {
         Connection connection = null;
@@ -104,6 +130,11 @@ public class ThreadRepository extends AbstractRepository implements Repository<T
         return thread;
     }
 
+    /**
+     * We delete a row by thread('s id)
+     * @param thread
+     * passed in by the service
+     */
     @Override
     public void delete(Thread thread) {
         Connection connection = null;
@@ -143,7 +174,9 @@ public class ThreadRepository extends AbstractRepository implements Repository<T
         }
     }
 
-    //Override methods not implemented because unused
+    /**Below methods not overridden because unused
+     *
+     */
     @Override
     public List<Thread> findAll() {
         return null;

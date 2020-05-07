@@ -20,6 +20,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * This is the main servlet which uses a FrontController design of sorts.
+ * This servlet will handle all the requests with url starting "/", meaning every route, realistically.
+ * Each doVerb method (Get, Post, Delete implemented) reads the beginning of a string
+ * and then uses a series of if/else and switch/case logic to invoke the correct handling method.
+ * This routing logic could be simplified with RegEx in later versions.
+ */
 @WebServlet("/")
 public class MainServlet extends HttpServlet {
     private final UserService userService = new UserService();
@@ -27,6 +34,16 @@ public class MainServlet extends HttpServlet {
     private final ThreadService threadService = new ThreadService();
     private final CommentService commentService = new CommentService();
 
+    /**
+     * The doGet override implementation matches routes coming in with a GET request.
+     * If the url route doesn't match any of the if/else and switch/case trees, the default route invoked.
+     *
+     * Routes like "/forum/(forumId)" and "/thread/(threadId)" are caught first,
+     * and then the switch/case catches the "/forums" and "/logout".
+     * All else routes to "/forums".
+     * @param request
+     * @param response
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
@@ -61,6 +78,15 @@ public class MainServlet extends HttpServlet {
         }
     }
 
+    /**
+     * The doPost override implementation matches routes coming in with a POST request.
+     * If the url route doesn't match any of the if/else and switch/case trees, the default route invoked.
+     *
+     * "/login", "/register", "/thread", and "/comment" routes each invoke their own processing methods.
+     * All else redirects to the default GET route.
+     * @param request
+     * @param response
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
@@ -87,6 +113,12 @@ public class MainServlet extends HttpServlet {
         }
     }
 
+    /**
+     * The doDelete method is to serve the thread deleting functionality.
+     * All other DELETE requests are redirected away to the default page.
+     * @param request
+     * @param response
+     */
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
@@ -103,12 +135,30 @@ public class MainServlet extends HttpServlet {
         }
     }
 
-
+    /**
+     * showLoginReg method loads the landing page, which is the LoginReg page.
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException
+     */
     private void showLoginReg(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
         dispatcher.forward(request, response);
     }
 
+    /**
+     * showAllForums method is the de facto home page, as routes not found will redirect here.
+     * Starting with this method and below, session is checked to see if an User is logged in.
+     * If no user is found in session, servlet will redirect to the LoginReg page.
+     * We set request Attribute to pass data to the JSP file.
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException
+     */
     private void showAllForums(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         HttpSession session = request.getSession();
         if(session.getAttribute("user") == null){
@@ -122,6 +172,16 @@ public class MainServlet extends HttpServlet {
         }
     }
 
+    /**
+     * showOneForum renders the view for one Forum and its Threads.
+     * If no user is found in session, servlet will redirect to the LoginReg page.
+     * We set request Attribute to pass data to the JSP file.
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException
+     */
     private void showOneForum(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         HttpSession session = request.getSession();
         if (session.getAttribute("user") == null) {
@@ -138,6 +198,16 @@ public class MainServlet extends HttpServlet {
         }
     }
 
+    /**
+     * showThread renders the page for one Thread and its comments.
+     * If no user is found in session, servlet will redirect to the LoginReg page.
+     * We set request Attribute to pass data to the JSP file.
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException
+     */
     private void showThread(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         HttpSession session = request.getSession();
         if (session.getAttribute("user") == null) {
@@ -156,6 +226,16 @@ public class MainServlet extends HttpServlet {
         }
     }
 
+    /**
+     * doLogin method handles the POST request for logging in.
+     * authenticateUser method is invoked from the service to log in the user.
+     * The user is then added to session.
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException
+     */
     private void doLogin(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         HttpSession session = request.getSession();
         String username = request.getParameter("username");
@@ -170,6 +250,16 @@ public class MainServlet extends HttpServlet {
         }
     }
 
+    /**
+     * doRegister method handles the POST request for Registering a new user.
+     * usernameAvailable is invoked from the service to check if a username can be used.
+     * User is then added to database and session.
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException
+     */
     private void doRegister(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         HttpSession session = request.getSession();
         String username = request.getParameter("username");
@@ -184,12 +274,30 @@ public class MainServlet extends HttpServlet {
         }
     }
 
+    /**
+     * doLogout method deletes the session and redirects to the login page.
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException
+     */
     private void doLogout(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         HttpSession session = request.getSession();
         session.invalidate();
         response.sendRedirect("/");
     }
 
+    /**
+     * postComment method handles the POST request to add a new Comment to a Thread.
+     * form submission data is pulled from the request and passed via service to the database.
+     * request is then redirected to render the Thread the Comment was added to.
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException
+     */
     private void postComment(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         HttpSession session = request.getSession();
         if (session.getAttribute("user") == null) {
@@ -203,6 +311,16 @@ public class MainServlet extends HttpServlet {
         }
     }
 
+    /**
+     * postThread method handles the POST request to add a anew Thread to a Forum.
+     * form submission data is pulled from the request and passed via service to the database.
+     * request is then redirected to render the Thread that was created.
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException
+     */
     private void postThread(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         HttpSession session = request.getSession();
         if (session.getAttribute("user") == null) {
@@ -217,6 +335,17 @@ public class MainServlet extends HttpServlet {
         }
     }
 
+    /**
+     * deleteThread method handles the DELETE request to remove a Thread from the database.
+     * passes the Thread id and the User in session to the service to handle.
+     * The redirect isn't given by the servlet, just the Status change.
+     * The JS script that made this AJAX request will handle the redirect in browser.
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException
+     */
     private void deleteThread(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         HttpSession session = request.getSession();
         if (session.getAttribute("user") == null) {

@@ -10,7 +10,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * UserRepository is an extension of the AbstractRepository and implements Repository interface.
+ * each method is explained below.
+ */
 public class UserRepository extends AbstractRepository implements Repository<User, Integer> {
+    /**
+     * We connect to the database with the static connectionUtil, then query the database for
+     * a row in the User table where username column matches the given string.
+     * @param username
+     * is passed in from the service.
+     * @return
+     * returns a User object instantiated with the query ResultSet.
+     */
     public User findByUsername(String username){
         Connection connection = null;
         User user = null;
@@ -41,6 +53,13 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         return user;
     }
 
+    /**
+     * We query the database for a User by an id given by the service.
+     * @param id
+     * is passed in from the service.
+     * @return
+     * returns a User object instantiated from the ResultSet.
+     */
     @Override
     public User findById(Integer id){
         Connection connection = null;
@@ -70,6 +89,14 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         return user;
     }
 
+    /**
+     * We query the database and insert a new row into the Users table.
+     * @param user
+     * is passed in by a Service.
+     * We read each property of the user with Getters and write those values into the preparedStatement's query.
+     * @return
+     * return the saved user object after we set the id of the user that the database generated.
+     */
     @Override
     public User save(User user) {
         Connection connection = null;
@@ -98,7 +125,9 @@ public class UserRepository extends AbstractRepository implements Repository<Use
     }
 
 
-    //Below methods not given override implementation because not used
+    /**
+     * Below methods not given override implementation because not used
+     */
     @Override
     public List<User> findAll() {
         return null;
