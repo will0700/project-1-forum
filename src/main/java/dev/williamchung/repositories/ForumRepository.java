@@ -10,8 +10,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ForumRepository is an extension of the AbstractRepository and implements Repository interface.
+ * each method is explained below.
+ */
 public class ForumRepository extends AbstractRepository implements Repository<Forum, Integer> {
-
+    /**
+     * We query the database for a Forum by id.
+     * @param integer
+     * is passed in by the Service.
+     * @return
+     * returns a Forum object instantiated with data from the ResultSet.
+     */
     @Override
     public Forum findById(Integer integer) {
         Connection connection = null;
@@ -42,6 +52,12 @@ public class ForumRepository extends AbstractRepository implements Repository<Fo
         return forum;
     }
 
+    /**
+     * We query the database for all the Forum objects.
+     * We create an ArrayList and add into it Forum objects instantiated from the ResultSet.
+     * @return
+     * We return the ArrayList of Forum objects.
+     */
     @Override
     public List<Forum> findAll() {
         Connection connection = null;
@@ -72,6 +88,9 @@ public class ForumRepository extends AbstractRepository implements Repository<Fo
         return forums;
     }
 
+    /**
+     * Below methods are not overriden or implemented.
+     */
     @Override
     public Forum save(Forum obj) {
         return null;

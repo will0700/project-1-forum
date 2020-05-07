@@ -1,5 +1,9 @@
 package dev.williamchung.models;
 
+/**
+ * This is the User model. Users have a username and password.
+ * This class contains the properties, constructor methods, a toString method, Getters, and Setters.
+ */
 public class User {
 
     private Integer id;

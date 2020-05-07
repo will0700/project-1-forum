@@ -1,6 +1,9 @@
 package dev.williamchung.models;
 
-
+/**
+ * This is the Thread model. Threads have a title and content. Threads have two foreign keys: authorId and a forumId.
+ * This class contains the properties, constructor, getters, and setters.
+ */
 public class Thread {
 
     private Integer id;

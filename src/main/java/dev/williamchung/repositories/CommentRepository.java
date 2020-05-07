@@ -11,7 +11,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The CommentRepository accesses the Comments table in the database.
+ * each method is explained below.
+ */
 public class CommentRepository extends AbstractRepository implements Repository<Comment, Integer> {
+    /**
+     * We query the database for a list of all the Comments by foreign key Thread id.
+     * @param id
+     * the Thread's id is passed in by the service.
+     * @return
+     * Return an ArrayList of all the Comments with foreign key matching the given Thread id.
+     */
     public List<Comment> findByComment(Integer id) {
         Connection connection = null;
         List<Comment> comments = new ArrayList<Comment>();
@@ -43,6 +54,13 @@ public class CommentRepository extends AbstractRepository implements Repository<
         return comments;
     }
 
+    /**
+     * We save a Comment object in the database
+     * @param comment
+     * a Comment object is passed in by the service. We Insert into the database Values pulled out by Getters.
+     * @return
+     * Return the saved Comment object, with its id updated with the database genereated id.
+     */
     @Override
     public Comment save(Comment comment) {
         Connection connection = null;
@@ -71,9 +89,9 @@ public class CommentRepository extends AbstractRepository implements Repository<
         return comment;
     }
 
-
-
-
+    /**
+     * Below methods are not overriden.
+     */
     @Override
     public Comment findById(Integer integer) {
         return null;
