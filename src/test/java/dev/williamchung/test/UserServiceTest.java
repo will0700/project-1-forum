@@ -19,6 +19,9 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
+/**
+ * This is the JUnit test class for UserService.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
@@ -37,6 +40,9 @@ public class UserServiceTest {
         user.setId(1);
     }
 
+    /**
+     * Test the authenticateUser method for success
+     */
     @Test
     public void testAuthenticateUserSuccess(){
 
@@ -44,24 +50,36 @@ public class UserServiceTest {
         assertEquals(userService.authenticateUser("testUserName","testPassword"),Boolean.TRUE);
     }
 
+    /**
+     * Test the authenticateUser method for failure
+     */
     @Test
     public void testAuthenticateUserFail(){
         when(userRepository.findByUsername("testUserName")).thenReturn(null);
         assertEquals(userService.authenticateUser("testUserName","testPassword"),Boolean.FALSE);
     }
 
+    /**
+     * Test the UsernameAvailable method for success
+     */
     @Test
     public void testUsernameAvailableSuccess(){
         when(userRepository.findByUsername("testUserName")).thenReturn(user);
         assertEquals(userService.usernameAvailable("testUserName"), Boolean.FALSE);
     }
 
+    /**
+     * Test the usernameAvailable method for failure
+     */
     @Test
     public void testUsernameAvailableFail(){
         when(userRepository.findByUsername("testUserName")).thenReturn(null);
         assertEquals(userService.usernameAvailable("testUserName"), Boolean.TRUE);
     }
 
+    /**
+     * Test the registerUser method for success
+     */
     @Test
     public void testRegisterUserSuccess(){
         Answer<User> answer = new Answer<User>() {
@@ -77,6 +95,9 @@ public class UserServiceTest {
 
     }
 
+    /**
+     * Test the getUserById method for success
+     */
     @Test
     public void getUserByIdTest(){
         when(userRepository.findById(1)).thenReturn(user);
@@ -86,6 +107,9 @@ public class UserServiceTest {
         assertEquals(user.getPassword(),resultUser.getPassword());
     }
 
+    /**
+     * Test the getUserByUsername method for success
+     */
     @Test
     public void getUserByUsernameTest(){
         when(userRepository.findByUsername("testUserName")).thenReturn(user);
@@ -94,8 +118,4 @@ public class UserServiceTest {
         assertEquals(user.getUsername(),resultUser.getUsername());
         assertEquals(user.getPassword(),resultUser.getPassword());
     }
-
-
-
-
 }
