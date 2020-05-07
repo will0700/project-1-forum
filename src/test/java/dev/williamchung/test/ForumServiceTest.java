@@ -1,4 +1,4 @@
-package test;
+package dev.williamchung.test;
 
 import dev.williamchung.models.Forum;
 import dev.williamchung.repositories.ForumRepository;
