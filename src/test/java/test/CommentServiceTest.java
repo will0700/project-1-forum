@@ -1,4 +1,4 @@
-package dev.williamchung.test;
+package test;
 
 import dev.williamchung.models.Comment;
 import dev.williamchung.models.User;

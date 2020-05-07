@@ -19,4 +19,8 @@ public class ThreadService {
         Thread thread = new Thread(threadTitle, threadContent, authorId, forumIdInteger);
         return threadRepository.save(thread);
     }
+
+    public void setThreadRepository(ThreadRepository threadRepository) {
+        this.threadRepository = threadRepository;
+    }
 }

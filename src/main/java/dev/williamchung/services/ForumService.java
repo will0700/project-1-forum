@@ -6,7 +6,9 @@ import dev.williamchung.repositories.ForumRepository;
 import java.util.List;
 
 public class ForumService {
+
     private ForumRepository forumRepository = new ForumRepository();
+
     public List<Forum> getAllForums() {
         return forumRepository.findAll();
     }
@@ -15,4 +17,7 @@ public class ForumService {
         return forumRepository.findById(intId);
     }
 
+    public void setForumRepository(ForumRepository forumRepository) {
+        this.forumRepository = forumRepository;
+    }
 }
