@@ -7,10 +7,16 @@ import dev.williamchung.repositories.CommentRepository;
 import java.util.List;
 
 public class CommentService {
-    private final CommentRepository commentRepository = new CommentRepository();
+    private CommentRepository commentRepository = new CommentRepository();
+
+    public void setCommentRepository(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }
+
     public List<Comment> getCommentsByThread(Integer threadId) {
         return commentRepository.findByComment(threadId);
     }
+
     public Comment postComment(String commentContent, User author, String threadId){
         Integer threadIdInteger = Integer.parseInt(threadId);
         Comment comment = new Comment(commentContent, author.getId(), threadIdInteger);

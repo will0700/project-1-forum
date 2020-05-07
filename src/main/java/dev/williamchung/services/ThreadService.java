@@ -7,7 +7,12 @@ import dev.williamchung.models.Thread;
 import java.util.List;
 
 public class ThreadService {
-    private final ThreadRepository threadRepository = new ThreadRepository();
+    private ThreadRepository threadRepository = new ThreadRepository();
+
+    public void setThreadRepository(ThreadRepository threadRepository) {
+        this.threadRepository = threadRepository;
+    }
+
     public List<Thread> getThreadsByForum(Integer forumId) {
         return threadRepository.findAllByForum(forumId);
     }

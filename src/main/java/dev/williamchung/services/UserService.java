@@ -4,7 +4,7 @@ import dev.williamchung.models.User;
 import dev.williamchung.repositories.UserRepository;
 
 public class UserService {
-    private final UserRepository userRepository = new UserRepository();
+    private UserRepository userRepository = new UserRepository();
 
     public User getUserByUsername(String username) {
         return this.userRepository.findByUsername(username);
@@ -12,6 +12,10 @@ public class UserService {
 
     public User getUserById(Integer id) {
         return this.userRepository.findById(id);
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public Boolean authenticateUser(String username, String password) {
