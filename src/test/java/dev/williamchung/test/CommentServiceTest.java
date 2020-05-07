@@ -18,6 +18,9 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is the JUnit test class for CommentService
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class CommentServiceTest {
 
@@ -42,12 +45,18 @@ public class CommentServiceTest {
         comments.add(new Comment());
     }
 
+    /**
+     * Test getCommentsByThread method
+     */
     @Test
     public void testGetCommentsByThread(){
         when(commentRepository.findByComment(1)).thenReturn(comments);
         assertEquals(commentService.getCommentsByThread(1).size(),1);
     }
 
+    /**
+     * Test postComment method
+     */
     @Test
     public void testPostComment(){
         Answer<Comment> answer = new Answer<Comment>() {

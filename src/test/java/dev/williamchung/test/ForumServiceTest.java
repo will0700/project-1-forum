@@ -15,6 +15,9 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
+/**
+ * This is the JUnit test class for ForumService.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ForumServiceTest {
 
@@ -37,12 +40,18 @@ public class ForumServiceTest {
         forum.setForumName(FORUM_NAME);
     }
 
+    /**
+     * Test getAllForums method
+     */
     @Test
     public void getAllForumsTest(){
         when(forumRepository.findAll()).thenReturn(forums);
         assertEquals(forumService.getAllForums(),forums);
     }
 
+    /**
+     * Test the getForumById method
+     */
     @Test
     public void getForumByIdTest(){
         when(forumRepository.findById(1)).thenReturn(forum);

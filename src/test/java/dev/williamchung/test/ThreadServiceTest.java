@@ -18,6 +18,9 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
+/**
+ * This is the JUnit test class for ThreadService
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ThreadServiceTest {
     @Mock
@@ -39,18 +42,27 @@ public class ThreadServiceTest {
         threads.add(thread);
     }
 
+    /**
+     * Test getThreadsByForum method
+     */
     @Test
     public void getThreadsByForumTest(){
         when(threadRepository.findAllByForum(1)).thenReturn(threads);
         assertEquals(threadService.getThreadsByForum(1), threads);
     }
 
+    /**
+     * Test getThreadsById method
+     */
     @Test
     public void getThreadsByIdTest(){
         when(threadRepository.findById(1)).thenReturn(thread);
         assertEquals(threadService.getThreadById("1"), thread);
     }
 
+    /**
+     * Test postThread method
+     */
     @Test
     public void postThreadTest(){
         assertEquals(threads.size(),1);
@@ -65,5 +77,4 @@ public class ThreadServiceTest {
         threadService.postThread("Title","Content",1,"1");
         assertEquals(threads.size(),2);
     }
-
 }
