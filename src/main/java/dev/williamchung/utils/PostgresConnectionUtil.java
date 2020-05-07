@@ -16,13 +16,13 @@ public class PostgresConnectionUtil extends ConnectionUtil {
 
     //Constructors
     public PostgresConnectionUtil() {
-        this.defaultSchema = "public";
+        defaultSchema = "public";
     }
     public PostgresConnectionUtil(String url, String username, String password, String schema) {
-        this.url = url;
-        this.username = username;
-        this.password = password;
-        this.defaultSchema = schema;
+        ConnectionUtil.url = url;
+        ConnectionUtil.username = username;
+        ConnectionUtil.password = password;
+        defaultSchema = schema;
     }
 
     //Override interface method

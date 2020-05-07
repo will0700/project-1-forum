@@ -104,6 +104,45 @@ public class ThreadRepository extends AbstractRepository implements Repository<T
         return thread;
     }
 
+    @Override
+    public void delete(Thread thread) {
+        Connection connection = null;
+        try {
+            connection = connectionUtil.getConnection();
+            String sqlQuery1 = "DELETE FROM forum.comments WHERE thread_id = ?;" ;
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sqlQuery1);
+            preparedStatement1.setInt(1, thread.getId());
+            preparedStatement1.executeUpdate();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }
+        try {
+            connection = connectionUtil.getConnection();
+            String sqlQuery2 = "DELETE FROM forum.threads WHERE id = ? ;";
+            PreparedStatement preparedStatement2 = connection.prepareStatement((sqlQuery2));
+            preparedStatement2.setInt(1, thread.getId());
+            preparedStatement2.executeUpdate();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }
+    }
+
     //Override methods not implemented because unused
     @Override
     public List<Thread> findAll() {
@@ -113,10 +152,5 @@ public class ThreadRepository extends AbstractRepository implements Repository<T
     @Override
     public Thread update(Thread obj) {
         return null;
-    }
-
-    @Override
-    public void delete(Thread obj) {
-
     }
 }

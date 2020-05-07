@@ -12,6 +12,6 @@ public abstract class ConnectionUtil {
     public abstract Connection getConnection() throws SQLException;
 
     public String getDefaultSchema() {
-        return this.defaultSchema;
+        return defaultSchema;
     }
 }

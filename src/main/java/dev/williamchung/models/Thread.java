@@ -15,7 +15,8 @@ public class Thread {
 
 
     //Constructors
-    public Thread(){};
+    public Thread(){}
+
     public Thread(String title, String content, Integer authorId, Integer forumId){
         this.title = title;
         this.content = content;
