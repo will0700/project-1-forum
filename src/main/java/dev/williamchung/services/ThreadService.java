@@ -1,12 +1,13 @@
 package dev.williamchung.services;
 
+import dev.williamchung.models.User;
 import dev.williamchung.repositories.ThreadRepository;
 import dev.williamchung.models.Thread;
 
 import java.util.List;
 
 public class ThreadService {
-    private ThreadRepository threadRepository = new ThreadRepository();
+    private final ThreadRepository threadRepository = new ThreadRepository();
     public List<Thread> getThreadsByForum(Integer forumId) {
         return threadRepository.findAllByForum(forumId);
     }
@@ -18,5 +19,12 @@ public class ThreadService {
         Integer forumIdInteger = Integer.parseInt(forumId);
         Thread thread = new Thread(threadTitle, threadContent, authorId, forumIdInteger);
         return threadRepository.save(thread);
+    }
+
+    public void deleteThreadById(String threadId, User user) {
+        Thread thread = getThreadById(threadId);
+        if (thread.getAuthorId() == user.getId()) {
+            threadRepository.delete(thread);
+        }
     }
 }

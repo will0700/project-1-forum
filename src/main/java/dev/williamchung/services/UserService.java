@@ -4,7 +4,7 @@ import dev.williamchung.models.User;
 import dev.williamchung.repositories.UserRepository;
 
 public class UserService {
-    private UserRepository userRepository = new UserRepository();
+    private final UserRepository userRepository = new UserRepository();
 
     public User getUserByUsername(String username) {
         return this.userRepository.findByUsername(username);

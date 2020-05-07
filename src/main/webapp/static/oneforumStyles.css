@@ -1,40 +1,75 @@
-#container{
-    background: lightgray;
-    margin-top: 10%;
-    text-align: center;
+#main-container{
+    background-color: #3498db;
+    width: 100%;
+    height: 100%;
+}
+
+#navigation-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background:white;
+    width: 50%;
+    padding:5px 5px 5px 5px;
+    border: #2980b9 4px solid;
+    border-radius:6px;
 }
 
 #logout{
     font-weight: bold;
 }
 
-.page-header{
-
-    text-shadow: 2px 2px #ff0000;
-
+#forum-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background:white;
+    width: 50%;
+    padding:5px 5px 5px 5px;
+    border: #2980b9 4px solid;
+    border-radius:6px;
 }
 
-#header2{
-    margin-top: 4%;
-    text-shadow: 2px 2px yellow;
+#form-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background:white;
+    width: 50%;
+    border: #2980b9 4px solid;
+    border-radius:6px;
 }
 
 #textbox{
-    height:200px;
+    height:100px;
     width: 500px;
     font-size:14pt;
 
 }
 
-#nav{
-    font-weight: bold;
-    font-size: x-large;
-    display: inline-block;
-    padding: 20px;
-    background-color: lightcyan;
+#threads-container{
+    background:white;
+    width: 50%;
+    padding:5px 5px 5px 5px;
+    border: #2980b9 4px solid;
+    border-radius:6px;
 }
 
 #header3{
-    margin-top: 2%;
-    text-shadow: 2px 2px white;
+    margin-top: 1%;
+    text-align: center;
+    /*text-shadow: 2px 2px white;*/
 }
+
+#nav{
+    font-weight: bold;
+    font-size: x-large;
+    display: block;
+    padding: 1%;
+    background-color: lightcyan;
+}
+
+

@@ -9,8 +9,6 @@
 <body>
     <br>
     <br>
-    <br>
-    <br>
     <div class="box">
         <form method="POST" action="login">
             <h1>Log In!</h1>

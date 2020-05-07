@@ -7,7 +7,7 @@ import dev.williamchung.repositories.CommentRepository;
 import java.util.List;
 
 public class CommentService {
-    private CommentRepository commentRepository = new CommentRepository();
+    private final CommentRepository commentRepository = new CommentRepository();
     public List<Comment> getCommentsByThread(Integer threadId) {
         return commentRepository.findByComment(threadId);
     }

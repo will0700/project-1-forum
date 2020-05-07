@@ -20,14 +20,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(
-        urlPatterns = {"/"},
-    name="thisisthemainservletname")
+@WebServlet("/")
 public class MainServlet extends HttpServlet {
-    private UserService userService = new UserService();
-    private ForumService forumService = new ForumService();
-    private ThreadService threadService = new ThreadService();
-    private CommentService commentService = new CommentService();
+    private final UserService userService = new UserService();
+    private final ForumService forumService = new ForumService();
+    private final ThreadService threadService = new ThreadService();
+    private final CommentService commentService = new CommentService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -89,6 +87,23 @@ public class MainServlet extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String action = request.getServletPath();
+        try {
+            if (action.startsWith("/thread/delete/")) {
+                deleteThread(request, response);
+                return;
+            } else {
+                showAllForums(request, response);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+
     private void showLoginReg(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
         dispatcher.forward(request, response);
@@ -134,6 +149,8 @@ public class MainServlet extends HttpServlet {
             request.setAttribute("thread", thread);
             List<Comment> comments = commentService.getCommentsByThread(thread.getId());
             request.setAttribute("comments", comments);
+            Forum forum = forumService.getForumById(thread.getForumId().toString());
+            request.setAttribute("forum", forum);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/oneThread.jsp");
             dispatcher.forward(request, response);
         }
@@ -197,6 +214,19 @@ public class MainServlet extends HttpServlet {
             String forumId = request.getParameter("forumId");
             Thread thread = threadService.postThread(threadTitle, threadContent, user.getId(),forumId);
             response.sendRedirect("/thread/" + thread.getId().toString());
+        }
+    }
+
+    private void deleteThread(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
+            response.sendRedirect("/");
+        } else {
+            User user = (User) session.getAttribute("user");
+            String action = request.getServletPath();
+            String threadId = (String) action.subSequence(15, action.length());
+            threadService.deleteThreadById(threadId, user);
+            response.setStatus(HttpServletResponse.SC_OK);
         }
     }
 }
