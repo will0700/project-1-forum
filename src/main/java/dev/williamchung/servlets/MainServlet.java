@@ -99,6 +99,7 @@ public class MainServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String action = request.getServletPath();
         try {
+            System.out.println(action);
             switch(action) {
                 case "/login":
                     doLogin(request, response);
@@ -255,11 +256,10 @@ public class MainServlet extends HttpServlet {
         if (userService.authenticateUser(username, password)) {
             User user = userService.getUserByUsername(username);
             session.setAttribute("user", user);
-            response.sendRedirect("/forums");
+            response.sendRedirect("forums");
             LOG.info("user logged in...");
         } else {
             response.sendRedirect("/");
-            //Need to let user know that login was invalid through JSP error page
         }
     }
 
